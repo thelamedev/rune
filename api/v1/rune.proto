@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package api.v1;
+
+option go_package = "github.com/thelamedev/rune/api/v1;apiv1";
+
+service RuneService {
+  rpc Put(PutRequest) returns (PutResponse);
+  rpc Get(GetRequest) returns (GetResponse);
+}
+
+// ----- Messages for Put -----
+message PutRequest {
+  string path = 1;
+  bytes value = 2;
+}
+
+message PutResponse {
+  bool success = 1;
+}
+
+// ----- Messages for Get -----
+message GetRequest {
+  string path = 1;
+}
+
+message GetResponse {
+  bytes value = 1;
+}
