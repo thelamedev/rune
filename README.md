@@ -47,7 +47,7 @@ Rune is currently a functional, single-node, secure vault. You can store and ret
 ### **Quick Start**
 
 1. **Clone the repository:**  
-   git clone \[https://github.com/thelamedev/rune.git\](https://github.com/thelamedev/rune.git)  
+   git clone [https://github.com/thelamedev/rune.git](https://github.com/thelamedev/rune.git)  
    cd rune
 
 2. Generate API code:  
