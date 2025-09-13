@@ -2,7 +2,7 @@
 
 **A simple, secure, and performant open-source system for secrets management and service discovery, designed for modern cloud-native applications.**
 
-Rune is being built live on YouTube\! You can follow the entire development process from scratch by watching the series [here](https://www.google.com/search?q=https://www.youtube.com/@thelamedev).
+<!-- Rune is being built live on YouTube\! You can follow the entire development process from scratch by watching the series [here](https://www.google.com/search?q=https://www.youtube.com/@thelamedev). -->
 
 ## **1\. Vision & Guiding Principles**
 
@@ -71,12 +71,12 @@ Rune is currently a functional, single-node, secure vault. You can store and ret
 
 ## **5\. Roadmap**
 
-The full product and development roadmap is detailed in [rune\_roadmap.md](https://www.google.com/search?q=./rune_roadmap.md).
+The full product and development roadmap is detailed in [ROADMAP.md](ROADMAP.md).
 
 ## **6\. Contributing**
 
-Contributions are welcome\! Please see the [CONTRIBUTING.md](https://www.google.com/search?q=./CONTRIBUTING.md) file for guidelines on how to get started.
+Contributions are welcome\! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to get started.
 
 ## **7\. License**
 
-Rune is licensed under the [MIT License](https://www.google.com/search?q=LICENSE).
+Rune is licensed under the [MIT License](LICENCE).
