@@ -1,6 +1,9 @@
 package storage
 
-import "context"
+import (
+	"context"
+	"io"
+)
 
 type Storage interface {
 	Initialize(ctx context.Context) error
@@ -8,4 +11,7 @@ type Storage interface {
 	Put(ctx context.Context, key string, value []byte) error
 	Delete(ctx context.Context, key string) error
 	List(ctx context.Context, prefix string) ([]string, error)
+	Snapshot(w io.Writer) error
+	Restore(r io.Reader) error
+	Close() error
 }

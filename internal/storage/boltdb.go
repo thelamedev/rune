@@ -4,7 +4,11 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
+	"os"
+	"time"
 
+	"github.com/pkg/errors"
 	"go.etcd.io/bbolt"
 )
 
@@ -101,4 +105,41 @@ func (s *BoltStore) List(ctx context.Context, prefix string) ([]string, error) {
 
 func (s *BoltStore) Close() error {
 	return s.db.Close()
+}
+
+func (b *BoltStore) Snapshot(w io.Writer) error {
+	return b.db.View(func(tx *bbolt.Tx) error {
+		// Set a large timeout for the snapshot to complete.
+		_, err := tx.WriteTo(w)
+		return err
+	})
+}
+
+func (b *BoltStore) Restore(r io.Reader) error {
+	if err := b.db.Close(); err != nil {
+		return errors.Wrap(err, "failed to close database before restoring")
+	}
+
+	snapshotData, err := io.ReadAll(r)
+	if err != nil {
+		return errors.Wrap(err, "failed to read snapshot data")
+	}
+
+	if err := os.WriteFile(b.dbPath, snapshotData, 0o600); err != nil {
+		return errors.Wrap(err, "failed to write snapshot data to database")
+	}
+
+	db, err := bbolt.Open(b.dbPath, 0o600, &bbolt.Options{Timeout: 1 * time.Second})
+	if err != nil {
+		return errors.Wrap(err, "failed to open database after restoring")
+	}
+
+	b.db = db
+	return b.db.Update(func(tx *bbolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists(bucketName)
+		if err != nil {
+			return fmt.Errorf("failed to create bucket: %w", err)
+		}
+		return nil
+	})
 }
