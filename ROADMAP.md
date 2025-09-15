@@ -90,60 +90,14 @@ This roadmap is broken into four distinct phases. Each phase represents a major 
 | P4-F6 | Observability | Expose detailed metrics in a standard format (e.g., Prometheus) for monitoring cluster health, API latency, and more. | prometheus/client\_golang |  |
 | P4-F7 | Web UI (Stretch Goal) | A simple, read-only web interface for visualizing cluster status, services, and managing unsealing. | Go embed, a simple JS framework like Svelte or Vue. |  |
 
-## **4\. Technical Deep Dive & Reference**
+## **4\. Security Considerations Checklist**
 
-### **4.1. Core Data Models (Go Structs)**
+* [ ] **TLS Everywhere:** All communication between nodes and between clients/servers MUST use mTLS.
 
-// Represents a secret stored in the backend.  
-type StoredSecret struct {  
-    Path           string    // e.g., "database/mysql/password"  
-    EncryptedValue \[\]byte    // The secret value, encrypted with the DEK.  
-    EncryptedDEK   \[\]byte    // The DEK, encrypted with the Master Key.  
-    Metadata       map\[string\]string  
-    Version        int  
-    CreatedAt      time.Time  
-}
+* [ ] **Memory Protection:** Secrets should have a minimal lifetime in memory. Use memguard or similar libraries to securely zero out memory after use.
 
-// Represents a live service instance for discovery.  
-type ServiceInstance struct {  
-    ServiceName string    // e.g., "api-service"  
-    InstanceID  string    // a unique ID for this instance  
-    Address     string    // "10.0.1.123:8080"  
-    Tags        \[\]string  // \["v1.2", "region:us-east-1"\]  
-    LeaseID     string    // ID for the TTL lease  
-}
+* [ ] **Input Validation:** Rigorously validate all API inputs to prevent injection or path traversal attacks.
 
-// Represents an authorization policy.  
-type Policy struct {  
-    Name  string  
-    Rules \[\]PolicyRule  
-}
+* [ ] **Rate Limiting:** Implement rate limiting on sensitive endpoints (e.g., auth, unseal) to prevent brute-force attacks.
 
-type PolicyRule struct {  
-    Path         string   // Path glob, e.g., "secrets/prod/\*"  
-    Capabilities \[\]string // "read", "write", "delete", "list"  
-}
-
-### **4.2. Security Considerations Checklist**
-
-* \[ \] **TLS Everywhere:** All communication between nodes and between clients/servers MUST use mTLS.
-
-* \[ \] **Memory Protection:** Secrets should have a minimal lifetime in memory. Use memguard or similar libraries to securely zero out memory after use.
-
-* \[ \] **Input Validation:** Rigorously validate all API inputs to prevent injection or path traversal attacks.
-
-* \[ \] **Rate Limiting:** Implement rate limiting on sensitive endpoints (e.g., auth, unseal) to prevent brute-force attacks.
-
-* \[ \] **Dependencies:** Regularly scan dependencies for known vulnerabilities (govulncheck).
-
-### **4.3. OSS & Community Strategy**
-
-* **Source Code:** Host on GitHub.
-
-* **License:** Choose a permissive license like **MIT** or **Apache 2.0**.
-
-* **Contribution Guide:** Create a CONTRIBUTING.md file explaining how to set up the dev environment, run tests, and submit pull requests.
-
-* **Communication:** Use GitHub Issues for bug tracking and feature requests. Consider a Discord or Slack for community discussion.
-
-* **YouTube:** Use the video series as the primary driver for community growth. Link to the GitHub repo in every video.
+* [ ] **Dependencies:** Regularly scan dependencies for known vulnerabilities (govulncheck).
